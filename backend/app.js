@@ -30,7 +30,7 @@ app.get("/api/posts", (req, res, next) => {
   const posts = [
     {
       id: "123a",
-      title: "Server-side post 1.0",
+      title: "Server-side post 1",
       content: "This is came from server :)",
     },
     {
