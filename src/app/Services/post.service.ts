@@ -21,12 +21,12 @@ export class PostService {
             return {
               id: post._id,
               title: post.title,
-              content: post.content
+              content: post.content,
             };
           });
         })
       )
-      .subscribe(transformedPosts => {
+      .subscribe((transformedPosts) => {
         this.posts = transformedPosts;
         this.postUpdated.next([...this.posts]);
       });
@@ -40,11 +40,23 @@ export class PostService {
 
   addPost(post: IPosts): void {
     this.http
-      .post<{ message: string }>('http://localhost:3000/api/posts', post)
+      .post<{ message: string; postId: string }>(
+        'http://localhost:3000/api/posts',
+        post
+      )
       .subscribe((res) => {
-        console.log(res.message);
+        const id = res.postId;
+        post.id = id
         this.posts.push(post);
         this.postUpdated.next([...this.posts]);
       });
+  }
+
+  deletePost(id: string) {
+    this.http.delete(`http://localhost:3000/api/posts/` + id).subscribe(() => {
+      const updatedPosts = this.posts.filter((post) => post.id !== id);
+      this.posts = updatedPosts;
+      this.postUpdated.next([...this.posts]);
+    });
   }
 }

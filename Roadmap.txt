@@ -1,0 +1,19 @@
+Mongoose Docs: http://mongoosejs.com/docs/guide.html
+MongoDB Docs: https://www.mongodb.com/
+MongoDB Atlas Docs: https://www.mongodb.com/cloud/atlas
+
+1. Mongoose for better access to MongoDb - npm install mongoose.
+2. import mongoose from "mongoose".
+3. Get connection link from MongoDB website.
+4. Modify link - Add db name
+4. mongoose.connect(<connection link>).
+5. Create Schema - const { Schema } = mongoose.
+6. Create & Export model = mongoose.model("<schema name>", <schema>).
+7. import schema in backend file. (For instance - 'post')
+8. post.save() - to save in db.
+9. post.find() - to fetch from db.
+10. post.deleteOne({filter}) - to delete single item from db.
+11. To see data in db - Connect to mongo shell ~ mongosh "mongodb+srv://<your proect>.xgfam.mongodb.net/" --apiVersion 1 --username <db_username>. (Go to MongoDB website, find the project you work in, find 'connect' button, then Shell)
+12. Switch to your db - use <db name> see 4.
+13. Run 'help' command to see possible commands 
+
