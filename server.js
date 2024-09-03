@@ -1,3 +1,5 @@
+import dotenv from "dotenv";
+dotenv.config();
 import http from "http";
 import debug from "debug";
 import app from "./backend/app.js";
@@ -12,7 +14,7 @@ const normalizePort = (val) => {
   if (port >= 0) {
     return port;
   }
-  
+
   return false;
 };
 
