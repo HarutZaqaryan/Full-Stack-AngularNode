@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { RouterOutlet } from '@angular/router';
+import { RouterModule, RouterOutlet } from '@angular/router';
 import { PostCreateComponent } from './Components/Posts/post-create/post-create.component';
 import { CommonModule } from '@angular/common';
 import { HeaderComponent } from './Components/header/header.component';
@@ -15,6 +15,7 @@ import { IPosts } from './Models/IPosts';
     HeaderComponent,
     PostCreateComponent,
     PostListComponent,
+    RouterModule,
   ],
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss',
@@ -22,7 +23,7 @@ import { IPosts } from './Models/IPosts';
 export class AppComponent {
   public storedPosts: IPosts[] = [];
 
-  onPostAdded(post:IPosts) {
-    this.storedPosts.push(post)
+  onPostAdded(post: IPosts) {
+    this.storedPosts.push(post);
   }
 }

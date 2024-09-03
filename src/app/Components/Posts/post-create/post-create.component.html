@@ -6,7 +6,7 @@
         type="text"
         placeholder="Title"
         name="titleForm"
-        ngModel
+        [ngModel]="post?.title"
         required
         minlength="3"
         #title="ngModel"
@@ -22,7 +22,7 @@
         rows="6"
         name="contentForm"
         placeholder="Content"
-        ngModel
+        [ngModel]="post?.content"
         required
         #content="ngModel"
       ></textarea>
@@ -31,6 +31,6 @@
       }
     </mat-form-field>
 
-    <button mat-raised-button color="primary" type="submit">Save Post</button>
+    <button mat-raised-button color="primary" type="submit">{{mode == 'create' ? 'Save ' : 'Edit '}} Post</button>
   </form>
 </mat-card>

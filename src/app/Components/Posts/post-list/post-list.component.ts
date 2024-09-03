@@ -5,11 +5,12 @@ import { CommonModule } from '@angular/common';
 import { PostService } from '../../../Services/post.service';
 import { Subscription, Subject } from 'rxjs';
 import { MatButtonModule } from '@angular/material/button';
+import { RouterModule } from '@angular/router';
 
 @Component({
   selector: 'app-post-list',
   standalone: true,
-  imports: [CommonModule, MatExpansionModule, MatButtonModule],
+  imports: [CommonModule, MatExpansionModule, MatButtonModule, RouterModule],
   templateUrl: './post-list.component.html',
   styleUrl: './post-list.component.scss',
 })
@@ -34,7 +35,8 @@ export class PostListComponent implements OnInit, OnDestroy {
   }
 
   deletePost(id: string | null) {
-      this.postService.deletePost(id!)}
+    this.postService.deletePost(id!);
+  }
 
   ngOnDestroy(): void {
     this.postSub.unsubscribe();

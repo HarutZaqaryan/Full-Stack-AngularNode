@@ -1,1 +1,15 @@
-<mat-toolbar color="primary">App</mat-toolbar>
+<mat-toolbar color="primary">
+  <span>
+    <a routerLink="/">My Posts </a>
+  </span>
+
+  <span class="spacer"></span>
+
+  <ul>
+    <li>
+      <a mat-flat-button routerLink="/create" routerLinkActive="mat-accent"
+        >Create Posts</a
+      >
+    </li>
+  </ul>
+</mat-toolbar>
