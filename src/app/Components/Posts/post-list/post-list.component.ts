@@ -6,17 +6,25 @@ import { PostService } from '../../../Services/post.service';
 import { Subscription, Subject } from 'rxjs';
 import { MatButtonModule } from '@angular/material/button';
 import { RouterModule } from '@angular/router';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 
 @Component({
   selector: 'app-post-list',
   standalone: true,
-  imports: [CommonModule, MatExpansionModule, MatButtonModule, RouterModule],
+  imports: [
+    CommonModule,
+    MatExpansionModule,
+    MatButtonModule,
+    RouterModule,
+    MatProgressSpinnerModule,
+  ],
   templateUrl: './post-list.component.html',
   styleUrl: './post-list.component.scss',
 })
 export class PostListComponent implements OnInit, OnDestroy {
   public posts: IPosts[] = [];
   private postSub!: Subscription;
+  public loading: boolean = false;
 
   constructor(public postService: PostService) {}
 
@@ -26,10 +34,12 @@ export class PostListComponent implements OnInit, OnDestroy {
 
   getPosts() {
     this.postService.getPosts();
+    this.loading = true;
     this.postSub = this.postService
       .getPostUpdateListener()
       .subscribe((posts: IPosts[]) => {
         this.posts = posts;
+        this.loading = false;
         console.log(posts);
       });
   }

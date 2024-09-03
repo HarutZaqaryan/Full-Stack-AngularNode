@@ -1,4 +1,8 @@
-@if (posts.length>0) {
+@if(loading) {
+<div class="spinner-container">
+  <mat-spinner></mat-spinner>
+</div>
+} @else { @if (posts.length>0) {
 <mat-accordion>
   @for (post of posts; track post) {
   <mat-expansion-panel>
@@ -7,12 +11,16 @@
     </mat-expansion-panel-header>
     <p>{{ post.content }}</p>
     <mat-action-row>
-      <a mat-raised-button color="accent" [routerLink]="['/edit',post.id]" >Edit</a>
-      <button mat-raised-button color="warn" (click)="deletePost(post.id)">Delete</button>
+      <a mat-raised-button color="accent" [routerLink]="['/edit', post.id]"
+        >Edit</a
+      >
+      <button mat-raised-button color="warn" (click)="deletePost(post.id)">
+        Delete
+      </button>
     </mat-action-row>
   </mat-expansion-panel>
   }
 </mat-accordion>
 } @else {
 <p class="no-data-info mat-body-1"><strong>No Posts Created Yet</strong></p>
-}
+} }

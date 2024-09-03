@@ -1,4 +1,7 @@
 <mat-card>
+  @if(loading) {
+  <mat-spinner></mat-spinner>
+  } @else {
   <form (submit)="onAddPost(postForm)" #postForm="ngForm">
     <mat-form-field>
       <input
@@ -31,6 +34,9 @@
       }
     </mat-form-field>
 
-    <button mat-raised-button color="primary" type="submit">{{mode == 'create' ? 'Save ' : 'Edit '}} Post</button>
+    <button mat-raised-button color="primary" type="submit">
+      {{ mode == "create" ? "Save " : "Edit " }} Post
+    </button>
   </form>
+  }
 </mat-card>

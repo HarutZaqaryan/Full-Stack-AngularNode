@@ -5,7 +5,8 @@ import { MatInputModule } from '@angular/material/input';
 import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
 import { PostService } from '../../../Services/post.service';
-import { ActivatedRoute, ParamMap, Router, RouterModule } from '@angular/router';
+import { ActivatedRoute, ParamMap, RouterModule } from '@angular/router';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 @Component({
   selector: 'app-post-create',
   standalone: true,
@@ -15,6 +16,7 @@ import { ActivatedRoute, ParamMap, Router, RouterModule } from '@angular/router'
     MatCardModule,
     MatButtonModule,
     RouterModule,
+    MatProgressSpinnerModule
   ],
   templateUrl: './post-create.component.html',
   styleUrl: './post-create.component.scss',
@@ -25,17 +27,18 @@ export class PostCreateComponent implements OnInit {
   public mode: string = 'create';
   private postID: string;
   public post: any;
+  public loading: boolean = false;
 
-  constructor(public postService: PostService, public route: ActivatedRoute,private router:Router) {}
+  constructor(public postService: PostService, public route: ActivatedRoute) {}
 
   ngOnInit(): void {
     this.route.paramMap.subscribe((paramMap: ParamMap) => {
       if (paramMap.has('postID')) {
         this.mode = 'edit';
         this.postID = paramMap.get('postID')!;
+        this.loading = true;
         this.postService.getPost(this.postID).subscribe((postData) => {
-          console.log('postdata',postData);
-          
+          this.loading = false;
           this.post = {
             id: postData._id,
             title: postData.title,
@@ -63,7 +66,6 @@ export class PostCreateComponent implements OnInit {
       this.postService.addPost(post);
     } else {
       this.postService.updatePost(this.postID, post);
-      this.router.navigate(['/'])
     }
     form.resetForm();
   }
