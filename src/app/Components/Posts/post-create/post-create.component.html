@@ -2,19 +2,16 @@
   @if(loading) {
   <mat-spinner></mat-spinner>
   } @else {
-  <form (submit)="onAddPost(postForm)" #postForm="ngForm">
+  <form (submit)="onAddPost()" [formGroup]="form">
     <mat-form-field>
       <input
         matInput
         type="text"
         placeholder="Title"
         name="titleForm"
-        [ngModel]="post?.title"
-        required
-        minlength="3"
-        #title="ngModel"
+        formControlName="title"
       />
-      @if (title.invalid) {
+      @if (form.get('title')!.invalid && form.get('title')?.touched) {
       <mat-error>Required</mat-error>
       }
     </mat-form-field>
@@ -25,14 +22,18 @@
         rows="6"
         name="contentForm"
         placeholder="Content"
-        [ngModel]="post?.content"
-        required
-        #content="ngModel"
+        formControlName="content"
       ></textarea>
-      @if (content.invalid) {
+      @if (form.get('content')!.invalid && form.get('content')?.touched) {
       <mat-error>Required</mat-error>
       }
     </mat-form-field>
+
+
+    <div>
+      <button mat-flat-button color="accent" type="button" style="margin-bottom: 10px;" (click)="filePicker.click()">Pick Image</button>
+      <input type="file" #filePicker>
+    </div>
 
     <button mat-raised-button color="primary" type="submit">
       {{ mode == "create" ? "Save " : "Edit " }} Post

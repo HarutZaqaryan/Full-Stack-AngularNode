@@ -1,5 +1,11 @@
 import { Component, OnInit } from '@angular/core';
-import { FormsModule, NgForm } from '@angular/forms';
+import {
+  FormControl,
+  FormGroup,
+  NgForm,
+  ReactiveFormsModule,
+  Validators,
+} from '@angular/forms';
 
 import { MatInputModule } from '@angular/material/input';
 import { MatCardModule } from '@angular/material/card';
@@ -11,12 +17,12 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
   selector: 'app-post-create',
   standalone: true,
   imports: [
-    FormsModule,
     MatInputModule,
     MatCardModule,
     MatButtonModule,
     RouterModule,
-    MatProgressSpinnerModule
+    MatProgressSpinnerModule,
+    ReactiveFormsModule,
   ],
   templateUrl: './post-create.component.html',
   styleUrl: './post-create.component.scss',
@@ -25,13 +31,22 @@ export class PostCreateComponent implements OnInit {
   public enteredTitle = '';
   public enteredContent = '';
   public mode: string = 'create';
-  private postID: string;
   public post: any;
   public loading: boolean = false;
+  private postID: string;
+
+  form: FormGroup;
 
   constructor(public postService: PostService, public route: ActivatedRoute) {}
 
   ngOnInit(): void {
+    this.form = new FormGroup({
+      title: new FormControl(null, {
+        validators: [Validators.required, Validators.minLength(2)],
+      }),
+      content: new FormControl(null, { validators: [Validators.required] }),
+    });
+
     this.route.paramMap.subscribe((paramMap: ParamMap) => {
       if (paramMap.has('postID')) {
         this.mode = 'edit';
@@ -44,6 +59,10 @@ export class PostCreateComponent implements OnInit {
             title: postData.title,
             content: postData.content,
           };
+          this.form.setValue({
+            title: this.post.title,
+            content: this.post.content,
+          });
         });
       } else {
         this.mode = 'create';
@@ -52,14 +71,14 @@ export class PostCreateComponent implements OnInit {
     });
   }
 
-  public onAddPost(form: NgForm) {
-    if (form.invalid) {
+  public onAddPost() {
+    if (this.form.invalid) {
       return;
     }
     const post = {
       id: this.postID ? this.postID : null,
-      title: form.value.titleForm,
-      content: form.value.contentForm,
+      title: this.form.value.title,
+      content: this.form.value.content,
     };
 
     if (this.mode === 'create') {
@@ -67,6 +86,8 @@ export class PostCreateComponent implements OnInit {
     } else {
       this.postService.updatePost(this.postID, post);
     }
-    form.resetForm();
+    this.form.reset();
+    this.form.get('title')?.setErrors(null);
+    this.form.get('content')?.setErrors(null);
   }
 }

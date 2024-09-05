@@ -12,3 +12,7 @@ textarea {
 button {
     width: 30%;
 } 
+
+input[type="file"] {
+    visibility: hidden;
+}
