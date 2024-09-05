@@ -42,23 +42,33 @@ postRoutes.post(
         message: "Post added successfully",
         post: {
           ...createdPost,
-          id: createdPost._id
+          id: createdPost._id,
         },
       });
     });
   }
 );
 
-postRoutes.put("/:id", (req, res, next) => {
-  const post = new Post({
-    _id: req.body.id,
-    title: req.body.title,
-    content: req.body.content,
-  });
-  Post.updateOne({ _id: req.params.id }, post).then((result) => {
-    res.status(200).json({ message: "Post successfully updated" });
-  });
-});
+postRoutes.put(
+  "/:id",
+  multer({ storage: storage }).single("image"),
+  (req, res, next) => {
+    let imagePath = req.body.imagePath
+    if (req.file) {
+      const url = req.protocol + "://" + req.get("host");
+      imagePath = url + "/images/" + req.file.filename
+    }
+    const post = new Post({
+      _id: req.body.id,
+      title: req.body.title,
+      content: req.body.content,
+      imagePath:imagePath
+    });    
+    Post.updateOne({ _id: req.params.id }, post).then((result) => {
+      res.status(200).json({ message: "Post successfully updated" });
+    });
+  }
+);
 
 postRoutes.get("", (req, res, next) => {
   Post.find()
