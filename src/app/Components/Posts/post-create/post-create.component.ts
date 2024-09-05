@@ -13,7 +13,7 @@ import { PostService } from '../../../Services/post.service';
 import { ActivatedRoute, ParamMap, RouterModule } from '@angular/router';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { mimeType } from './mime-type.validator';
-import {MatSnackBar, MatSnackBarModule} from '@angular/material/snack-bar';
+import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 @Component({
   selector: 'app-post-create',
   standalone: true,
@@ -25,7 +25,7 @@ import {MatSnackBar, MatSnackBarModule} from '@angular/material/snack-bar';
     MatProgressSpinnerModule,
     ReactiveFormsModule,
     MatProgressSpinnerModule,
-    MatSnackBarModule
+    MatSnackBarModule,
   ],
   templateUrl: './post-create.component.html',
   styleUrl: './post-create.component.scss',
@@ -44,7 +44,11 @@ export class PostCreateComponent implements OnInit {
 
   form: FormGroup;
 
-  constructor(public postService: PostService, public route: ActivatedRoute, private snackBar:MatSnackBar) {}
+  constructor(
+    public postService: PostService,
+    public route: ActivatedRoute,
+    private snackBar: MatSnackBar
+  ) {}
 
   ngOnInit(): void {
     this.form = new FormGroup({
@@ -69,6 +73,7 @@ export class PostCreateComponent implements OnInit {
             id: postData._id,
             title: postData.title,
             content: postData.content,
+            image:null
           };
           this.form.setValue({
             title: this.post.title,
@@ -105,6 +110,7 @@ export class PostCreateComponent implements OnInit {
       id: this.postID ? this.postID : null,
       title: this.form.value.title,
       content: this.form.value.content,
+      image: this.form.value.image,
     };
 
     if (this.mode === 'create') {
@@ -117,8 +123,8 @@ export class PostCreateComponent implements OnInit {
     this.form.get('content')?.setErrors(null);
     this.imagePreview = '';
 
-    this.snackBar.open('Post successfully created','',{
-      duration:1000
-    })
+    this.snackBar.open('Post successfully created', '', {
+      duration: 1000,
+    });
   }
 }

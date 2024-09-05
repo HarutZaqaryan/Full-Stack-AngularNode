@@ -3,6 +3,7 @@ import bodyParser from "body-parser";
 import mongoose from "mongoose";
 import dotenv from "dotenv";
 import postRoutes from "./routes/posts.js";
+import path from "path";
 dotenv.config();
 
 const DB_CONNECTION = process.env.DB_CONNECTION;
@@ -18,6 +19,8 @@ mongoose
   });
 
 app.use(bodyParser.json());
+
+app.use("/images", express.static(path.join('backend/images')));
 
 app.use((req, res, next) => {
   res.setHeader("Access-Control-Allow-Origin", "*");
