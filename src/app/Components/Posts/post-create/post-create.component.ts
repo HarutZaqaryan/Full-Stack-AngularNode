@@ -1,8 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import {
   FormControl,
   FormGroup,
-  NgForm,
   ReactiveFormsModule,
   Validators,
 } from '@angular/forms';
@@ -13,6 +12,8 @@ import { MatButtonModule } from '@angular/material/button';
 import { PostService } from '../../../Services/post.service';
 import { ActivatedRoute, ParamMap, RouterModule } from '@angular/router';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { mimeType } from './mime-type.validator';
+import {MatSnackBar, MatSnackBarModule} from '@angular/material/snack-bar';
 @Component({
   selector: 'app-post-create',
   standalone: true,
@@ -23,6 +24,8 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
     RouterModule,
     MatProgressSpinnerModule,
     ReactiveFormsModule,
+    MatProgressSpinnerModule,
+    MatSnackBarModule
   ],
   templateUrl: './post-create.component.html',
   styleUrl: './post-create.component.scss',
@@ -34,10 +37,14 @@ export class PostCreateComponent implements OnInit {
   public post: any;
   public loading: boolean = false;
   private postID: string;
+  public imagePreview: any;
+  public imageLoading: boolean = false;
+
+  @ViewChild('filePicker') filePicker: ElementRef;
 
   form: FormGroup;
 
-  constructor(public postService: PostService, public route: ActivatedRoute) {}
+  constructor(public postService: PostService, public route: ActivatedRoute, private snackBar:MatSnackBar) {}
 
   ngOnInit(): void {
     this.form = new FormGroup({
@@ -45,6 +52,10 @@ export class PostCreateComponent implements OnInit {
         validators: [Validators.required, Validators.minLength(2)],
       }),
       content: new FormControl(null, { validators: [Validators.required] }),
+      image: new FormControl(null, {
+        validators: [Validators.required],
+        asyncValidators: mimeType,
+      }),
     });
 
     this.route.paramMap.subscribe((paramMap: ParamMap) => {
@@ -71,6 +82,21 @@ export class PostCreateComponent implements OnInit {
     });
   }
 
+  onImagePicked(event: Event) {
+    const file = (event.target as HTMLInputElement).files?.[0];
+    this.form.patchValue({ image: file });
+    this.form.get('image')?.updateValueAndValidity();
+    console.log(file);
+
+    const reader = new FileReader();
+    this.imageLoading = true;
+    reader.onload = () => {
+      this.imagePreview = reader.result;
+      this.imageLoading = false;
+    };
+    reader.readAsDataURL(file!);
+  }
+
   public onAddPost() {
     if (this.form.invalid) {
       return;
@@ -89,5 +115,10 @@ export class PostCreateComponent implements OnInit {
     this.form.reset();
     this.form.get('title')?.setErrors(null);
     this.form.get('content')?.setErrors(null);
+    this.imagePreview = '';
+
+    this.snackBar.open('Post successfully created','',{
+      duration:1000
+    })
   }
 }

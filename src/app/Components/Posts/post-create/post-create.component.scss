@@ -1,18 +1,26 @@
 mat-card {
-    padding: 30px;
+  padding: 30px;
 }
 
 mat-form-field,
 textarea {
-    width: 100%;
-    margin: auto;
+  width: 100%;
+  margin: auto;
 }
 
-
 button {
-    width: 30%;
-} 
+  width: 30%;
+}
 
 input[type="file"] {
-    visibility: hidden;
+  visibility: hidden;
+}
+
+.image-preview {
+  height: 5rem;
+  margin: 1rem 0;
+
+  img {
+    height: 100%;
+  }
 }

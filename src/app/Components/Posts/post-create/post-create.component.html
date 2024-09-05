@@ -16,7 +16,33 @@
       }
     </mat-form-field>
 
-    <mat-form-field>
+    <div>
+      <button
+        mat-stroked-button
+        type="button"
+        style="margin-bottom: 10px"
+        (click)="filePicker.click()"
+      >
+        Pick Image
+      </button>
+      <input
+        type="file"
+        #filePicker
+        (change)="onImagePicked($event)"
+      />
+    </div>
+
+    @if (imageLoading) {
+      <mat-spinner diameter="50"></mat-spinner>
+    }
+
+    @if (imagePreview !== '' && imagePreview && form.get('image')?.valid) {
+    <div class="image-preview">
+      <img [src]="imagePreview" [alt]="form.value.title" />
+    </div>
+    }
+
+    <mat-form-field style="margin-top: 10px">
       <textarea
         matInput
         rows="6"
@@ -28,12 +54,6 @@
       <mat-error>Required</mat-error>
       }
     </mat-form-field>
-
-
-    <div>
-      <button mat-flat-button color="accent" type="button" style="margin-bottom: 10px;" (click)="filePicker.click()">Pick Image</button>
-      <input type="file" #filePicker>
-    </div>
 
     <button mat-raised-button color="primary" type="submit">
       {{ mode == "create" ? "Save " : "Edit " }} Post
