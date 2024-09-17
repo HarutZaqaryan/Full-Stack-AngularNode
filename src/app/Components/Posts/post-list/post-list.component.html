@@ -2,7 +2,7 @@
 <div class="spinner-container">
   <mat-spinner></mat-spinner>
 </div>
-} @else { @if (posts.length>0) {
+} @else { @if (posts.length>0 && !loading){
 <mat-accordion>
   @for (post of posts; track post) {
   <mat-expansion-panel>
@@ -24,12 +24,14 @@
   </mat-expansion-panel>
   }
 </mat-accordion>
+
 <mat-paginator
   [length]="totalPosts"
   [pageSize]="postsPerPage"
   [pageSizeOptions]="pageSizeOptions"
   (page)="onChangePage($event)"
 ></mat-paginator>
+
 } @else {
 <p class="no-data-info mat-body-1"><strong>No Posts Created Yet</strong></p>
 } }
