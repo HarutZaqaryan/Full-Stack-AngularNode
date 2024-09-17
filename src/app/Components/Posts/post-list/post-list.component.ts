@@ -3,11 +3,11 @@ import { MatExpansionModule } from '@angular/material/expansion';
 import { IPosts } from '../../../Models/IPosts';
 import { CommonModule } from '@angular/common';
 import { PostService } from '../../../Services/post.service';
-import { Subscription, Subject } from 'rxjs';
+import { Subscription } from 'rxjs';
 import { MatButtonModule } from '@angular/material/button';
 import { RouterModule } from '@angular/router';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
-
+import { MatPaginatorModule, PageEvent } from '@angular/material/paginator';
 @Component({
   selector: 'app-post-list',
   standalone: true,
@@ -17,6 +17,7 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
     MatButtonModule,
     RouterModule,
     MatProgressSpinnerModule,
+    MatPaginatorModule,
   ],
   templateUrl: './post-list.component.html',
   styleUrl: './post-list.component.scss',
@@ -25,6 +26,9 @@ export class PostListComponent implements OnInit, OnDestroy {
   public posts: IPosts[] = [];
   private postSub!: Subscription;
   public loading: boolean = false;
+  public totalPosts: number = 10;
+  public postsPerPage: number = 3;
+  public pageSizeOptions: number[] = [1, 5, 10];
 
   constructor(public postService: PostService) {}
 
@@ -46,6 +50,10 @@ export class PostListComponent implements OnInit, OnDestroy {
 
   deletePost(id: string | null) {
     this.postService.deletePost(id!);
+  }
+
+  onChangePage(pageDate: PageEvent) {
+    console.log(pageDate);
   }
 
   ngOnDestroy(): void {
