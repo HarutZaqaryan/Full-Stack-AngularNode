@@ -3,6 +3,7 @@ import bodyParser from "body-parser";
 import mongoose from "mongoose";
 import dotenv from "dotenv";
 import postRoutes from "./routes/posts.js";
+import userRoutes from "./routes/user.js";
 import path from "path";
 dotenv.config();
 
@@ -49,5 +50,6 @@ app.options("*", (req, res) => {
 });
 
 app.use("/api/posts", postRoutes);
+app.use("/api/user", userRoutes);
 
 export default app;

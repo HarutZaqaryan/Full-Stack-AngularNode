@@ -6,8 +6,26 @@
   <span class="spacer"></span>
 
   <ul>
-    <li>
-      <a mat-flat-button routerLink="/create" routerLinkActive="mat-accent"
+    <div class="auth">
+      <ul>
+        <li>
+          <a mat-button routerLink="/signup" routerLinkActive="mat-accent"
+            >Sign Up</a
+          >
+        </li>
+        <li>
+          <a mat-button routerLink="/login" routerLinkActive="mat-accent"
+            >Login</a
+          >
+        </li>
+      </ul>
+    </div>
+    <li class="create-btn">
+      <a
+        mat-flat-button
+        color="accent"
+        routerLink="/create"
+        routerLinkActive="mat-accent"
         >Create Posts</a
       >
     </li>
