@@ -10,7 +10,11 @@ import { AuthService } from './auth.service';
 export class PostService {
   public posts: IPosts[] = [];
   private postUpdated = new Subject<{ posts: IPosts[]; postCount: number }>();
-  constructor(private http: HttpClient, private router: Router,private authService:AuthService) {}
+  constructor(
+    private http: HttpClient,
+    private router: Router,
+    private authService: AuthService
+  ) {}
 
   getPosts(postsPerPage: number, currentPage: number) {
     const queryParams = `?pageSize=${postsPerPage}&page=${currentPage}`;
@@ -27,6 +31,7 @@ export class PostService {
                 title: post.title,
                 content: post.content,
                 image: post.imagePath,
+                creator: post.creator,
               };
             }),
             maxPosts: postData.maxPosts,
@@ -50,6 +55,7 @@ export class PostService {
       title: string;
       content: string;
       imagePath: string;
+      creator: string;
     }>(`http://localhost:3000/api/posts/` + id);
   }
 
@@ -86,6 +92,7 @@ export class PostService {
         title: post.title,
         content: post.title,
         imagePath: post.image,
+        creator: '',
       };
     }
     this.http

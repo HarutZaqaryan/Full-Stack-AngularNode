@@ -37,8 +37,8 @@ postRoutes.post(
       title: req.body.title,
       content: req.body.content,
       imagePath: url + "/images/" + req.file.filename,
+      creator: req.userData.userId,
     });
-
     post.save().then((createdPost) => {
       res.status(201).json({
         message: "Post added successfully",
@@ -66,9 +66,18 @@ postRoutes.put(
       title: req.body.title,
       content: req.body.content,
       imagePath: imagePath,
+      creator:req.userData.userId
     });
-    Post.updateOne({ _id: req.params.id }, post).then((result) => {
-      res.status(200).json({ message: "Post successfully updated" });
+
+    Post.updateOne(
+      { _id: req.params.id, creator: req.userData.userId },
+      post
+    ).then((result) => {
+      if (result.modifiedCount > 0) {
+        res.status(200).json({ message: "Post successfully updated" });
+      } else {
+        res.status(401).json({ message: "Update failed, not authorized!!!" });
+      }
     });
   }
 );
@@ -108,12 +117,19 @@ postRoutes.get("/:id", (req, res, next) => {
 });
 
 postRoutes.delete("/:id", checkAuth, (req, res, next) => {
-  Post.deleteOne({ _id: req.params.id }).then((res) => {
-    console.log(res);
-  });
-  res.status(200).json({
-    message: "Post Deleted",
-  });
+  Post.deleteOne({ _id: req.params.id, creator: req.userData.userId }).then(
+    (result) => {
+      if (result.deletedCount > 0) {
+        res.status(200).json({
+          message: "Post Deleted",
+        });
+      } else {
+        res.status(401).json({
+          message: "Can't delete the post, not authorized",
+        });
+      }
+    }
+  );
 });
 
 export default postRoutes;

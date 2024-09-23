@@ -3,4 +3,6 @@ export interface IPosts {
   title: string;
   content: string;
   image?: File;
+  creator?:string
 }
+
