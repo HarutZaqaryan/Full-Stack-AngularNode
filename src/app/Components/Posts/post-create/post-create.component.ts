@@ -14,6 +14,7 @@ import { ActivatedRoute, ParamMap, RouterModule } from '@angular/router';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { mimeType } from './mime-type.validator';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
+import { HttpClientModule } from '@angular/common/http';
 @Component({
   selector: 'app-post-create',
   standalone: true,
@@ -26,6 +27,7 @@ import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
     ReactiveFormsModule,
     MatProgressSpinnerModule,
     MatSnackBarModule,
+    HttpClientModule
   ],
   templateUrl: './post-create.component.html',
   styleUrl: './post-create.component.scss',
@@ -73,12 +75,12 @@ export class PostCreateComponent implements OnInit {
             id: postData._id,
             title: postData.title,
             content: postData.content,
-            image:postData.imagePath
+            image: postData.imagePath,
           };
           this.form.setValue({
             title: this.post.title,
             content: this.post.content,
-            image:this.post.image
+            image: this.post.image,
           });
         });
       } else {

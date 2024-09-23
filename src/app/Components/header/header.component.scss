@@ -5,20 +5,21 @@ a {
   transition: color 0.3s ease-in;
 }
 
-ul {
+.actions {
   list-style: none;
   display: flex;
-  column-gap: 10px;
-  justify-content: space-between;
-  .auth {
-    display: flex;
-    column-gap: 5px;
-  }
+  column-gap: 30px;
   .create-btn {
     a {
-      width: 135px;
+      width: 140px;
     }
   }
+}
+
+.auth {
+  list-style: none;
+  display: flex;
+  column-gap: 5px;
 }
 
 .spacer {

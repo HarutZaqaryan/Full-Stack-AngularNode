@@ -5,6 +5,7 @@ import { MatCardModule } from '@angular/material/card';
 import { MatFormField } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { AuthService } from '../../../Services/auth.service';
 
 @Component({
   selector: 'app-login',
@@ -22,14 +23,14 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 })
 export class LoginComponent {
   public loading: boolean = false;
-  constructor() {}
+  constructor(private authService: AuthService) {}
 
   onLogin(form: NgForm) {
-    if (form.valid) {
-      console.log(
-        'file: login.component.ts:28 -> LoginComponent -> onLogin -> form:',
-        form.value
-      );
+    if (form.invalid) {
+      return;
     }
+    this.loading = true;
+
+    this.authService.loginUser(form.value.email, form.value.password);
   }
 }

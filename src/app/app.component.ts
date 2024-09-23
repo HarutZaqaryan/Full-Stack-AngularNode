@@ -1,10 +1,10 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { RouterModule, RouterOutlet } from '@angular/router';
 import { PostCreateComponent } from './Components/Posts/post-create/post-create.component';
 import { CommonModule } from '@angular/common';
 import { HeaderComponent } from './Components/header/header.component';
 import { PostListComponent } from './Components/Posts/post-list/post-list.component';
-import { IPosts } from './Models/IPosts';
+import { AuthService } from './Services/auth.service';
 
 @Component({
   selector: 'app-root',
@@ -20,10 +20,10 @@ import { IPosts } from './Models/IPosts';
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss',
 })
-export class AppComponent {
-  public storedPosts: IPosts[] = [];
+export class AppComponent implements OnInit {
+  constructor(private authService: AuthService) {}
 
-  onPostAdded(post: IPosts) {
-    this.storedPosts.push(post);
+  ngOnInit(): void {
+    this.authService.autoAuthUser()
   }
 }

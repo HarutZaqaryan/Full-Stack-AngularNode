@@ -1,13 +1,26 @@
 <mat-toolbar color="primary">
   <span>
-    <a routerLink="/">My Posts </a>
+    <a routerLink="/">Posts </a>
   </span>
 
   <span class="spacer"></span>
 
-  <ul>
-    <div class="auth">
-      <ul>
+  <ul class="actions">
+    @if (userIsAuthenticated) {
+    <li class="create-btn">
+      <a
+        mat-flat-button
+        color="accent"
+        routerLink="/create"
+        routerLinkActive="mat-accent"
+        >Create Posts</a
+      >
+    </li>
+    }
+
+    <li>
+      <ul class="auth">
+        @if (!userIsAuthenticated) {
         <li>
           <a mat-button routerLink="/signup" routerLinkActive="mat-accent"
             >Sign Up</a
@@ -18,16 +31,12 @@
             >Login</a
           >
         </li>
+        } @else {
+        <li>
+          <button mat-button (click)="onLogOut()">Log Out</button>
+        </li>
+        }
       </ul>
-    </div>
-    <li class="create-btn">
-      <a
-        mat-flat-button
-        color="accent"
-        routerLink="/create"
-        routerLinkActive="mat-accent"
-        >Create Posts</a
-      >
     </li>
   </ul>
 </mat-toolbar>

@@ -1,6 +1,7 @@
 import express from "express";
 import { Post } from "../models/post.js";
 import multer from "multer";
+import { checkAuth } from "../middleware/check-auth.js";
 
 const postRoutes = express.Router();
 
@@ -28,6 +29,7 @@ const storage = multer.diskStorage({
 
 postRoutes.post(
   "",
+  checkAuth,
   multer({ storage: storage }).single("image"),
   (req, res, next) => {
     const url = req.protocol + "://" + req.get("host");
@@ -51,6 +53,7 @@ postRoutes.post(
 
 postRoutes.put(
   "/:id",
+  checkAuth,
   multer({ storage: storage }).single("image"),
   (req, res, next) => {
     let imagePath = req.body.imagePath;
@@ -88,7 +91,7 @@ postRoutes.get("", (req, res, next) => {
       res.status(200).json({
         message: "Posts fetched",
         posts: fetchedPosts,
-        maxPosts:count
+        maxPosts: count,
       });
     })
     .catch((err) => console.log(err));
@@ -104,7 +107,7 @@ postRoutes.get("/:id", (req, res, next) => {
   });
 });
 
-postRoutes.delete("/:id", (req, res, next) => {
+postRoutes.delete("/:id", checkAuth, (req, res, next) => {
   Post.deleteOne({ _id: req.params.id }).then((res) => {
     console.log(res);
   });
