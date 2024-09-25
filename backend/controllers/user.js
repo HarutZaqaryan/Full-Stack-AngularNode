@@ -1,6 +1,10 @@
 import { User } from "../models/user.js";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
+import dotenv from "dotenv";
+dotenv.config();
+
+const SECRET_KEY = process.env.SECRET_KEY
 
 export function createUser(req, res, next) {
   bcrypt.hash(req.body.password, 10).then((hash) => {
@@ -46,7 +50,7 @@ export function loginUser(req, res, next) {
 
       const token = jwt.sign(
         { email: fetchedUser.email, userId: fetchedUser._id },
-        "SECRET_keeping_secrets_is_a_good_ability:)By-Har",
+        SECRET_KEY,
         { expiresIn: "1h" }
       );
       res.status(200).json({

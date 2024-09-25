@@ -133,17 +133,19 @@ export class PostCreateComponent implements OnInit, OnDestroy {
 
     if (this.mode === 'create') {
       this.postService.addPost(post);
+      this.snackBar.open('Post successfully created', '', {
+        duration: 1000,
+      });
     } else {
       this.postService.updatePost(this.postID, post);
+      this.snackBar.open('Post successfully updated', '', {
+        duration: 1000,
+      });
     }
     this.form.reset();
     this.form.get('title')?.setErrors(null);
     this.form.get('content')?.setErrors(null);
     this.imagePreview = '';
-
-    this.snackBar.open('Post successfully created', '', {
-      duration: 1000,
-    });
   }
 
   ngOnDestroy(): void {

@@ -1,6 +1,5 @@
 import { Post } from "../models/post.js";
 
-
 export function createPost(req, res, next) {
   const url = req.protocol + "://" + req.get("host");
   const post = new Post({
@@ -43,11 +42,7 @@ export function updatePost(req, res, next) {
 
   Post.updateOne({ _id: req.params.id, creator: req.userData.userId }, post)
     .then((result) => {
-      if (result.modifiedCount > 0) {
-        res.status(200).json({ message: "Post successfully updated" });
-      } else {
-        res.status(401).json({ message: "Update failed, not authorized!!!" });
-      }
+      res.status(200).json({ message: "Post successfully updated" });
     })
     .catch((error) => {
       res.status(500).json({
