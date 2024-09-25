@@ -1,4 +1,10 @@
-import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
+import {
+  Component,
+  OnInit,
+  ViewChild,
+  ElementRef,
+  OnDestroy,
+} from '@angular/core';
 import {
   FormControl,
   FormGroup,
@@ -15,6 +21,8 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { mimeType } from './mime-type.validator';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { HttpClientModule } from '@angular/common/http';
+import { Subscription } from 'rxjs';
+import { AuthService } from '../../../Services/auth.service';
 @Component({
   selector: 'app-post-create',
   standalone: true,
@@ -27,20 +35,21 @@ import { HttpClientModule } from '@angular/common/http';
     ReactiveFormsModule,
     MatProgressSpinnerModule,
     MatSnackBarModule,
-    HttpClientModule
+    HttpClientModule,
   ],
   templateUrl: './post-create.component.html',
   styleUrl: './post-create.component.scss',
 })
-export class PostCreateComponent implements OnInit {
+export class PostCreateComponent implements OnInit, OnDestroy {
   public enteredTitle = '';
   public enteredContent = '';
   public mode: string = 'create';
   public post: any;
   public loading: boolean = false;
-  private postID: string;
   public imagePreview: any;
   public imageLoading: boolean = false;
+  private postID: string;
+  private authStatusSub: Subscription;
 
   @ViewChild('filePicker') filePicker: ElementRef;
 
@@ -49,10 +58,17 @@ export class PostCreateComponent implements OnInit {
   constructor(
     public postService: PostService,
     public route: ActivatedRoute,
-    private snackBar: MatSnackBar
+    private snackBar: MatSnackBar,
+    private authService: AuthService
   ) {}
 
   ngOnInit(): void {
+    this.authStatusSub = this.authService.authStatusListener.subscribe(
+      (authStatus) => {
+        this.loading = false;
+      }
+    );
+
     this.form = new FormGroup({
       title: new FormControl(null, {
         validators: [Validators.required, Validators.minLength(2)],
@@ -76,7 +92,7 @@ export class PostCreateComponent implements OnInit {
             title: postData.title,
             content: postData.content,
             image: postData.imagePath,
-            creator: postData.creator
+            creator: postData.creator,
           };
           this.form.setValue({
             title: this.post.title,
@@ -130,5 +146,9 @@ export class PostCreateComponent implements OnInit {
     this.snackBar.open('Post successfully created', '', {
       duration: 1000,
     });
+  }
+
+  ngOnDestroy(): void {
+    this.authStatusSub.unsubscribe();
   }
 }

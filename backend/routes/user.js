@@ -22,7 +22,7 @@ userRoutes.post("/signup", (req, res, next) => {
       })
       .catch((err) => {
         res.status(500).json({
-          error: err,
+          message: "Invalid authentication credentials",
         });
       });
   });
@@ -33,8 +33,8 @@ userRoutes.post("/login", (req, res, next) => {
   User.findOne({ email: req.body.email })
     .then((user) => {
       if (!user) {
-        return res.status(401).json({
-          message: "User not found!!!",
+        return res.status(500).json({
+          message: "User not found",
         });
       }
       fetchedUser = user;
@@ -42,8 +42,8 @@ userRoutes.post("/login", (req, res, next) => {
     })
     .then((result) => {
       if (!result) {
-        return res.status(401).json({
-          message: "User not found!!!",
+        return res.status(500).json({
+          message: "Wrong Crendentials: Password",
         });
       }
 
@@ -53,15 +53,14 @@ userRoutes.post("/login", (req, res, next) => {
         { expiresIn: "1h" }
       );
       res.status(200).json({
-        message: "Success",
         token: token,
         expiresIn: 3600,
         userId: fetchedUser._id,
       });
     })
     .catch((err) => {
-      return res.status(401).json({
-        message: "Something went wrong!!!",
+      res.status(401).json({
+        message: "Invalid authentication credential",
       });
     });
 });

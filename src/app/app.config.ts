@@ -4,8 +4,13 @@ import { provideRouter } from '@angular/router';
 import { routes } from './app.routes';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
 import { PostService } from './Services/post.service';
-import { HTTP_INTERCEPTORS, provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
+import {
+  HTTP_INTERCEPTORS,
+  provideHttpClient,
+  withInterceptorsFromDi,
+} from '@angular/common/http';
 import { AuthInterceptor } from './Services/auth.interceptor';
+import { ErrorInterceptor } from './Services/error.interceptor';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -17,6 +22,11 @@ export const appConfig: ApplicationConfig = {
       useClass: AuthInterceptor,
       multi: true,
     },
-    PostService
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: ErrorInterceptor,
+      multi: true,
+    },
+    PostService,
   ],
 };

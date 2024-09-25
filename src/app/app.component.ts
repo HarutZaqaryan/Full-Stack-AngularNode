@@ -5,7 +5,6 @@ import { CommonModule } from '@angular/common';
 import { HeaderComponent } from './Components/header/header.component';
 import { PostListComponent } from './Components/Posts/post-list/post-list.component';
 import { AuthService } from './Services/auth.service';
-
 @Component({
   selector: 'app-root',
   standalone: true,
@@ -15,7 +14,7 @@ import { AuthService } from './Services/auth.service';
     HeaderComponent,
     PostCreateComponent,
     PostListComponent,
-    RouterModule,
+    RouterModule
   ],
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss',
@@ -24,6 +23,6 @@ export class AppComponent implements OnInit {
   constructor(private authService: AuthService) {}
 
   ngOnInit(): void {
-    this.authService.autoAuthUser()
+    this.authService.autoAuthUser();
   }
 }
